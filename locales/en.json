@@ -1,0 +1,11 @@
+{
+  "home": {
+    "title": "Welcome",
+    "lang": "Eng",
+    "introduction": "This is an introduction in English.",
+    "navbar": "This is a navbar",
+    "header": "This is a header",
+    "sidebar": "This is a sidebar",
+    "footer": "This starter template is made by thecodeorigin.com"
+  }
+}

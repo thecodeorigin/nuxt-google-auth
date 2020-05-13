@@ -1,0 +1,11 @@
+{
+  "home": {
+    "title": "Chào mừng",
+    "lang": "Việt",
+    "introduction": "Đây là một đoạn giới thiệu bằng Tiếng Việt.",
+    "navbar": "Đây là thanh điều hướng",
+    "header": "Đây là một header",
+    "sidebar": "Đây là một sidebar",
+    "footer": "Mẫu website này được làm bởi thecodeorigin.com"
+  }
+}

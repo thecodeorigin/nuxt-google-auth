@@ -1,0 +1,48 @@
+@import 'assets/scss/bootstrap-vue/components/alert.scss';
+@import 'assets/scss/bootstrap-vue/components/badge.scss';
+@import 'assets/scss/bootstrap-vue/components/breadcrumb.scss';
+@import 'assets/scss/bootstrap-vue/components/button-group.scss';
+@import 'assets/scss/bootstrap-vue/components/button-toolbar.scss';
+@import 'assets/scss/bootstrap-vue/components/button.scss';
+@import 'assets/scss/bootstrap-vue/components/calendar.scss';
+@import 'assets/scss/bootstrap-vue/components/card.scss';
+@import 'assets/scss/bootstrap-vue/components/carousel.scss';
+@import 'assets/scss/bootstrap-vue/components/collapse.scss';
+@import 'assets/scss/bootstrap-vue/components/dropdown.scss';
+@import 'assets/scss/bootstrap-vue/components/embed.scss';
+@import 'assets/scss/bootstrap-vue/components/form.scss';
+@import 'assets/scss/bootstrap-vue/components/form-checkbox.scss';
+@import 'assets/scss/bootstrap-vue/components/form-daypicker.scss';
+@import 'assets/scss/bootstrap-vue/components/form-file.scss';
+@import 'assets/scss/bootstrap-vue/components/form-group.scss';
+@import 'assets/scss/bootstrap-vue/components/form-input.scss';
+@import 'assets/scss/bootstrap-vue/components/form-radio.scss';
+@import 'assets/scss/bootstrap-vue/components/form-spinbutton.scss';
+@import 'assets/scss/bootstrap-vue/components/form-tags.scss';
+@import 'assets/scss/bootstrap-vue/components/form-textarea.scss';
+@import 'assets/scss/bootstrap-vue/components/image.scss';
+@import 'assets/scss/bootstrap-vue/components/input-group.scss';
+@import 'assets/scss/bootstrap-vue/components/jumbotron.scss';
+@import 'assets/scss/bootstrap-vue/components/layout-and-grid.scss';
+@import 'assets/scss/bootstrap-vue/components/link.scss';
+@import 'assets/scss/bootstrap-vue/components/list-group.scss';
+@import 'assets/scss/bootstrap-vue/components/media.scss';
+@import 'assets/scss/bootstrap-vue/components/modal.scss';
+@import 'assets/scss/bootstrap-vue/components/nav.scss';
+@import 'assets/scss/bootstrap-vue/components/navbar.scss';
+@import 'assets/scss/bootstrap-vue/components/pagination.scss';
+@import 'assets/scss/bootstrap-vue/components/pagination-nav.scss';
+@import 'assets/scss/bootstrap-vue/components/popover.scss';
+@import 'assets/scss/bootstrap-vue/components/progress.scss';
+@import 'assets/scss/bootstrap-vue/components/spinner.scss';
+@import 'assets/scss/bootstrap-vue/components/table.scss';
+@import 'assets/scss/bootstrap-vue/components/tabs.scss';
+@import 'assets/scss/bootstrap-vue/components/toasts.scss';
+@import 'assets/scss/bootstrap-vue/components/tooltip.scss';
+
+@import 'assets/scss/bootstrap-vue/others/variants.scss';
+
+// Import Bootstrap and BootstrapVue source SCSS files
+// This is required! For variants customization for your theme!
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
