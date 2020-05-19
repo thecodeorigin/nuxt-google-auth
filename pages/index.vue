@@ -1,6 +1,7 @@
 <template>
   <b-container fluid>
     <ExampleComponent />
+    <GoogleSigninButton />
   </b-container>
 </template>
 
@@ -9,7 +10,9 @@ export default {
   name: 'Home',
   components: {
     ExampleComponent: () =>
-      import('~/components/specifics/Home/ExampleComponent.vue')
+      import('~/components/specifics/Home/ExampleComponent.vue'),
+    GoogleSigninButton: () =>
+      import('../components/common/Plugin/GoogleSigninButton')
   },
   created() {
     // Global function and variable from mixins

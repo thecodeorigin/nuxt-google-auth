@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="info">
+  <b-navbar toggleable="lg" type="dark" variant="success">
     <b-navbar-brand>
       <nuxt-link to="/" class="text-light" style="text-decoration: none">
         {{ $t('home.navbar') }}
@@ -10,9 +10,20 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <nuxt-link to="/introduction" class="text-light">
-          Introduction
-        </nuxt-link>
+        <a
+          href="https://github.com/thecodeorigin/nuxt-google-auth"
+          class="text-light"
+          target="blank"
+        >
+          Github
+        </a>
+        <a
+          href="https://developers.google.com/identity/sign-in/web"
+          class="text-light ml-3"
+          target="blank"
+        >
+          Google's docs
+        </a>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

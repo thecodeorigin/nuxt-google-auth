@@ -23,7 +23,11 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/assets/scss/bootstrap-vue/custom.scss', '~/assets/scss/main.scss'],
+  css: [
+    '~/assets/scss/bootstrap-vue/custom.scss',
+    '~/assets/scss/main.scss',
+    '~/assets/css/animate.css/style.css'
+  ],
   /*
    ** Plugins to load before mounting the App
    */
