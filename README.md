@@ -6,6 +6,8 @@
 - Create a app.html file from the example one to add some script tags for Google API stuff
 - You are now good to go, use the GoogleSigninButton.vue as you want, it's the core of this example
 
+The access_token and currentUser got from logging in is stored in Vuex Store's state
+
 Check out https://github.com/thecodeorigin to start your project faster
 
 ## Build Setup

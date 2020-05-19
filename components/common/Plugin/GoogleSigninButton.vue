@@ -48,20 +48,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      currentUser: {},
-      config: {
-        developerKey: process.env.API_KEY,
-        clientId: process.env.CLIENT_ID,
-        // scope: 'https://www.googleapis.com/auth/drive.file',
-        appId: process.env.PROJECT_ID
-      }
-    }
-  },
   computed: {
     isSignedIn() {
-      return JSON.stringify(this.currentUser) == '{}' ? false : true
+      return this.$store.state.currentUser == null ? false : true
     }
   },
   mounted() {
@@ -76,8 +65,12 @@ export default {
   },
   methods: {
     onsuccess(user) {
-      this.currentUser = user.getBasicProfile()
-      alert(`Signed in with ${this.currentUser.yu}`)
+      this.$store.commit('SET_CURRENT_USER', user.getBasicProfile())
+      this.$store.commit(
+        'SET_ACCESS_TOKEN',
+        window.gapi.auth2.getAuthInstance().currentUser.je.tc.access_token
+      )
+      alert(`Signed in with ${this.$store.state.currentUser.yu}`)
     },
     onSignOut() {
       window.gapi.load('auth2', () => {
@@ -90,7 +83,8 @@ export default {
               .getAuthInstance()
               .signOut()
               .then(() => {
-                this.currentUser = {}
+                this.$store.commit('SET_CURRENT_USER', null)
+                this.$store.commit('SET_ACCESS_TOKEN', null)
                 alert('User signed out.')
               })
           })
