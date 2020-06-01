@@ -48,6 +48,18 @@
 
 <script>
 export default {
+  data() {
+    return {
+      token: '',
+      currentUser: {
+        name: '',
+        email: '',
+        first_name: '',
+        last_name: '',
+        image_url: ''
+      }
+    }
+  },
   computed: {
     isSignedIn() {
       return this.$store.state.currentUser == null ? false : true
@@ -65,12 +77,20 @@ export default {
   },
   methods: {
     onsuccess(user) {
-      this.$store.commit('SET_CURRENT_USER', user.getBasicProfile())
-      this.$store.commit(
-        'SET_ACCESS_TOKEN',
-        window.gapi.auth2.getAuthInstance().currentUser.je.tc.access_token
-      )
-      alert(`Signed in with ${this.$store.state.currentUser.yu}`)
+      this.token = window.gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getAuthResponse().access_token
+      this.currentUser = {
+        name: user.getBasicProfile().getName(),
+        email: user.getBasicProfile().getEmail(),
+        first_name: user.getBasicProfile().getFamilyName(),
+        last_name: user.getBasicProfile().getGivenName(),
+        image_url: user.getBasicProfile().getImageUrl()
+      }
+      this.$store.commit('SET_CURRENT_USER', this.currentUser)
+      this.$store.commit('SET_ACCESS_TOKEN', this.token)
+      alert(`Signed in with ${this.$store.state.currentUser.name}`)
     },
     onSignOut() {
       window.gapi.load('auth2', () => {
