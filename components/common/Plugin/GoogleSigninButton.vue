@@ -1,55 +1,77 @@
 <template>
   <div>
-    <!-- Google's default sign in button -->
-    <div
-      v-show="!isSignedIn"
-      id="google-signin-button"
-      class="google-signin-button animated fadeIn faster"
-    />
+    <!-- Custom sign in button -->
+    <div v-show="!isSignedIn" id="gSignInWrapper">
+      <div id="google-signin-button">
+        <!--  -->
+        <b-button
+          :size="options.size"
+          :variant="options.variant.signedIn"
+          :disabled="isSignedIn && doneLoading"
+          class="customGPlusSignIn google-button google-signin-button animated fadeIn faster"
+        >
+          <span v-if="!doneLoading" class="google-signin-button-spinner mr-1">
+            <b-spinner
+              :variant="options.variant.loading"
+              style="width: 1rem; height: 1rem"
+            />
+          </span>
+          <slot name="signin-inner">
+            <span class="google-signin-button-text">
+              Sign in
+            </span>
+          </slot>
+        </b-button>
+      </div>
+    </div>
     <!-- Custom sign out button -->
-    <b-button
-      v-if="isSignedIn"
-      variant="danger"
-      class="google-signout-button p-0 text-left animated fadeIn faster"
-      @click="onSignOut"
-    >
-      <svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 48 48"
-        class="google-signout-button-logo"
+    <div v-show="isSignedIn" id="gSignOutWrapper" @click="onSignOut">
+      <!--  -->
+      <!--  -->
+      <b-button
+        :size="options.size"
+        :variant="options.variant.signedOut"
+        :disabled="!isSignedIn && doneLoading"
+        class="google-button google-signout-button animated fadeIn faster"
       >
-        <g>
-          <path
-            fill="#EA4335"
-            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+        <span v-if="!doneLoading" class="google-signin-button-spinner mr-1">
+          <b-spinner
+            :variant="options.variant.loading"
+            style="width: 1rem; height: 1rem"
           />
-          <path
-            fill="#4285F4"
-            d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-          />
-          <path
-            fill="#FBBC05"
-            d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-          />
-          <path
-            fill="#34A853"
-            d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-          />
-          <path fill="none" d="M0 0h48v48H0z" />
-        </g>
-      </svg>
-      <span class="google-signout-button-text">
-        Sign out
-      </span>
-    </b-button>
+        </span>
+        <slot name="signout-inner">
+          <span class="google-signout-button-text">
+            Sign out
+          </span>
+        </slot>
+      </b-button>
+    </div>
   </div>
 </template>
 
 <script>
+// https://developers.google.com/identity/sign-in/web/sign-in
 export default {
+  props: {
+    options: {
+      type: Object,
+      default: function() {
+        return {
+          size: 'sm',
+          variant: {
+            loading: 'light',
+            signedIn: 'success',
+            signedOut: 'danger'
+          }
+        }
+      }
+    }
+  },
   data() {
     return {
+      doneLoading: false,
+      isSignedIn: false,
       token: '',
       currentUser: {
         name: '',
@@ -60,27 +82,70 @@ export default {
       }
     }
   },
-  computed: {
-    isSignedIn() {
-      return this.$store.state.currentUser == null ? false : true
-    }
-  },
   mounted() {
     // window only usable in mounted hook
     if (!window.gapi) {
       return
     } else {
-      window.gapi.signin2.render('google-signin-button', {
-        onsuccess: this.onsuccess
+      // Sign in the user if they are currently signed in.
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2
+          .init({
+            client_id: process.env.CLIENT_ID
+          })
+          .then(() => {
+            this.doneLoading = true
+            // Check if signed in and did have id_token stored
+            if (
+              window.gapi.auth2.getAuthInstance().isSignedIn.get() &&
+              localStorage.getItem('currentUser') != null &&
+              localStorage.getItem('token') != null
+            ) {
+              this.isSignedIn = true
+            } else {
+              this.isSignedIn = false
+              this.initAuthButton()
+            }
+          })
       })
+      //
     }
   },
   methods: {
+    initAuthButton() {
+      //
+      if (process.client) {
+        //
+        window.gapi.load('auth2', () => {
+          var element = document.getElementById('google-signin-button')
+          window.gapi.auth2
+            .init({
+              client_id: process.env.CLIENT_ID
+            })
+            .then((auth2) => {
+              auth2.attachClickHandler(
+                element,
+                {},
+                () => {
+                  this.onsuccess(
+                    window.gapi.auth2.getAuthInstance().currentUser.get()
+                  )
+                },
+                (error) => {
+                  console.log(JSON.stringify(error, undefined, 2))
+                }
+              )
+            })
+        })
+      }
+    },
     onsuccess(user) {
+      // Get token
       this.token = window.gapi.auth2
         .getAuthInstance()
         .currentUser.get()
-        .getAuthResponse().access_token
+        .getAuthResponse().id_token
+      // Get current user
       this.currentUser = {
         name: user.getBasicProfile().getName(),
         email: user.getBasicProfile().getEmail(),
@@ -88,9 +153,10 @@ export default {
         last_name: user.getBasicProfile().getGivenName(),
         image_url: user.getBasicProfile().getImageUrl()
       }
-      this.$store.commit('SET_CURRENT_USER', this.currentUser)
-      this.$store.commit('SET_ACCESS_TOKEN', this.token)
-      alert(`Signed in with ${this.$store.state.currentUser.name}`)
+      // Store token and current user
+      localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
+      localStorage.setItem('token', this.token)
+      this.isSignedIn = true
     },
     onSignOut() {
       window.gapi.load('auth2', () => {
@@ -103,8 +169,12 @@ export default {
               .getAuthInstance()
               .signOut()
               .then(() => {
-                this.$store.commit('SET_CURRENT_USER', null)
-                this.$store.commit('SET_ACCESS_TOKEN', null)
+                // Remove token and current user
+                localStorage.removeItem('currentUser')
+                localStorage.removeItem('token')
+                this.isSignedIn = false
+                // Re-init signin button
+                this.initAuthButton()
                 alert('User signed out.')
               })
           })
@@ -113,23 +183,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.google-signout-button {
-  width: 120px;
-  height: 36px;
-  border-radius: 0;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
-}
-.google-signout-button-logo {
-  margin: 8px;
-  width: 17px;
-  height: 17px;
-}
-.google-signout-button-text {
-  font-size: 13px;
-  font-size: Roboto;
-  font-weight: 500;
-  margin-left: 13px;
-}
-</style>

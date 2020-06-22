@@ -7,8 +7,5 @@ export default {
   },
   SET_CURRENT_USER(state, user) {
     state.currentUser = user
-  },
-  SET_ACCESS_TOKEN(state, token) {
-    state.googleOAuthToken = token
   }
 }
