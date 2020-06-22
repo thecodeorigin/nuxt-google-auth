@@ -99,7 +99,8 @@ export default {
             if (
               window.gapi.auth2.getAuthInstance().isSignedIn.get() &&
               localStorage.getItem('currentUser') != null &&
-              localStorage.getItem('token') != null
+              localStorage.getItem('token') != null &&
+              localStorage.getItem('isSignedInWithGoogle')
             ) {
               this.isSignedIn = true
             } else {
@@ -132,7 +133,8 @@ export default {
                   )
                 },
                 (error) => {
-                  console.log(JSON.stringify(error, undefined, 2))
+                  if (error.error == 'popup_closed_by_user')
+                    console.error('User has closed google authentication popup')
                 }
               )
             })
@@ -156,6 +158,7 @@ export default {
       // Store token and current user
       localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
       localStorage.setItem('token', this.token)
+      localStorage.setItem('isSignedInWithGoogle', true)
       this.isSignedIn = true
     },
     onSignOut() {
@@ -172,10 +175,11 @@ export default {
                 // Remove token and current user
                 localStorage.removeItem('currentUser')
                 localStorage.removeItem('token')
+                localStorage.removeItem('isSignedInWithGoogle')
                 this.isSignedIn = false
                 // Re-init signin button
                 this.initAuthButton()
-                alert('User signed out.')
+                console.warn('User signed out.')
               })
           })
       })
