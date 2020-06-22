@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div class="d-inline-block">
     <!-- Custom sign in button -->
     <div v-show="!isSignedIn" id="gSignInWrapper">
       <div id="google-signin-button">
-        <!--  -->
         <b-button
           :size="options.size"
           :variant="options.variant.signedIn"
@@ -26,8 +25,6 @@
     </div>
     <!-- Custom sign out button -->
     <div v-show="isSignedIn" id="gSignOutWrapper" @click="onSignOut">
-      <!--  -->
-      <!--  -->
       <b-button
         :size="options.size"
         :variant="options.variant.signedOut"
