@@ -49,6 +49,13 @@
 
 <script>
 // https://developers.google.com/identity/sign-in/web/sign-in
+// You don't need to modify this component, but you can if you want to
+// This component $emit('onSignIn', {currentUser, token}) when sign in successfully
+// And fire $emit('onSignOut') when user sign out
+// It also store auth data to localStorage
+// This component doesn't use VueX or anything else, just the localStorage
+// To use this, you need to specify your CLIENT_ID you got from your Google developer console in .env
+// You also have to include Google API platform source code in app.html (there's a app.html.example)
 export default {
   props: {
     options: {
@@ -100,6 +107,10 @@ export default {
               localStorage.getItem('isSignedInWithGoogle')
             ) {
               this.isSignedIn = true
+              this.$emit('onSignIn', {
+                currentUser: localStorage.getItem('currentUser'),
+                token: localStorage.getItem('token')
+              })
             } else {
               this.isSignedIn = false
               this.initAuthButton()
@@ -153,6 +164,10 @@ export default {
         image_url: user.getBasicProfile().getImageUrl()
       }
       // Store token and current user
+      this.$emit('onSignIn', {
+        currentUser: this.currentUser,
+        token: this.token
+      })
       localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
       localStorage.setItem('token', this.token)
       localStorage.setItem('isSignedInWithGoogle', true)
@@ -174,6 +189,7 @@ export default {
                 localStorage.removeItem('token')
                 localStorage.removeItem('isSignedInWithGoogle')
                 this.isSignedIn = false
+                this.$emit('onSignOut')
                 // Re-init signin button
                 this.initAuthButton()
                 console.warn('User signed out.')
